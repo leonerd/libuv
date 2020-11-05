@@ -111,10 +111,38 @@ Data types
     ::
 
         typedef enum {
+            /*
+            * The following four options are mutually-exclusive, and define
+            * the operation to perform for the corresponding file descriptor
+            * in the child process:
+            */
+
+            /*
+            * No file descriptor will be provided (or redirected to
+            * `/dev/null` if it is fd 0, 1 or 2).
+            */
             UV_IGNORE = 0x00,
+
+            /*
+            * TODO(leonerd): I imagine this creates a pipe of some kind,
+            * giving one end to the created process. I have no idea what
+            * happens to the other end.
+            /*
             UV_CREATE_PIPE = 0x01,
+
+            /*
+            * The child process will be given a duplicate of the parent's
+            * file descriptor given by `data.fd`.
+            */
             UV_INHERIT_FD = 0x02,
+
+            /*
+            * The child process will be given a duplicate of the parent's
+            * file descriptor being used by the stream handle given by
+            * `data.stream`.
+            */
             UV_INHERIT_STREAM = 0x04,
+
             /*
             * When UV_CREATE_PIPE is specified, UV_READABLE_PIPE and UV_WRITABLE_PIPE
             * determine the direction of flow, from the child process' perspective. Both
@@ -123,9 +151,9 @@ Data types
             UV_READABLE_PIPE = 0x10,
             UV_WRITABLE_PIPE = 0x20
             /*
-             * Open the child pipe handle in overlapped mode on Windows.
-             * On Unix it is silently ignored.
-             */
+            * Open the child pipe handle in overlapped mode on Windows.
+            * On Unix it is silently ignored.
+            */
             UV_OVERLAPPED_PIPE = 0x40
         } uv_stdio_flags;
 
